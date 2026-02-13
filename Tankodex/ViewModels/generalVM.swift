@@ -1,5 +1,5 @@
     //
-    //  MangasVM.swift
+    //  MangaListViewModel.swift
     //  Tankodex
     //
     //  Created by Sergio García on 10/2/26.
@@ -9,27 +9,32 @@ import Foundation
 
 @MainActor
 @Observable
-final class MangaListViewModel {
+final class generalVM {
         // MARK: - State
-    private(set) var mangas: [Manga] = []
-    private(set) var metadata: PaginationMetadata?
     private(set) var isLoading = false
     private(set) var errorMessage: String?
     
+        // MARK: - Pagination
+    private let pagination = PaginationController(itemsPerPage: 20)  // ← USAR controlador
+    
         // MARK: - Dependencies
     private let repository: NetworkRepository
-    
-        // MARK: - Configuration
-    private let itemsPerPage = 20
-    private var currentPage = 1
     
         // MARK: - Initialization
     init(repository: NetworkRepository = Network()) {
         self.repository = repository
     }
     
+        // MARK: - Computed Properties (exponer datos de pagination)
     
-        // MARK: Computed Properties
+    var mangas: [Manga] {
+        pagination.mangas
+    }
+    
+    var metadata: PaginationMetadata? {
+        pagination.metadata
+    }
+    
     var topFiveMangas: [Manga] {
         mangas
             .sorted { $0.score > $1.score }
@@ -39,13 +44,14 @@ final class MangaListViewModel {
     
     var recentMangas: [Manga] {
         mangas
-        // .distantPast = Constante de Date -> Date.distantPast = 01/01/0001
-        //                                     Date.distantFuture = 31/12/4001
-            .sorted { ($0.startDate ?? .distantPast) > ($1.startDate ?? .distantPast) }
+            .filter { $0.startDate != nil }
+            .sorted { $0.startDate! > $1.startDate! }
             .prefix(10)
             .map { $0 }
     }
+    
         // MARK: - Public Methods
+    
     func loadMangas() async {
         guard !isLoading else { return }
         
@@ -53,16 +59,8 @@ final class MangaListViewModel {
         errorMessage = nil
         
         do {
-            let result = try await repository.getMangas(
-                page: currentPage,
-                perPage: itemsPerPage
-            )
-            
-            mangas = result.mangas
-            metadata = result.metadata
-            
+            _ = try await pagination.loadInitialPage(from: repository)
         } catch {
-                // Con typed throws, 'error' ya es NetworkError automáticamente
             errorMessage = error.localizedDescription
         }
         
@@ -70,33 +68,35 @@ final class MangaListViewModel {
     }
     
     func loadNextPage() async {
-        guard let metadata,
-              metadata.hasMorePages,
-              !isLoading else { return }
+        guard !isLoading else { return }
         
-        currentPage += 1
         isLoading = true
         errorMessage = nil
         
         do {
-            let result = try await repository.getMangas(
-                page: currentPage,
-                perPage: itemsPerPage
-            )
-            
-            mangas.append(contentsOf: result.mangas)
-            self.metadata = result.metadata
-            
+            _ = try await pagination.loadNextPage(from: repository)
         } catch {
             errorMessage = error.localizedDescription
-            currentPage -= 1
         }
         
         isLoading = false
     }
     
     func retry() async {
-        currentPage = 1
+        pagination.reset()
         await loadMangas()
     }
 }
+
+
+// Testing
+//func testPaginationController() async throws {
+//    let controller = PaginationController()
+//    let repo = NetworkTest()
+//    
+//    _ = try await controller.loadInitialPage(from: repo)
+//    XCTAssertEqual(controller.mangas.count, 5)
+//    
+//    _ = try await controller.loadNextPage(from: repo)
+//    XCTAssertEqual(controller.mangas.count, 10)
+//}

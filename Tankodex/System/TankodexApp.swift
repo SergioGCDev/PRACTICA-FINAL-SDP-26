@@ -9,12 +9,14 @@ import SwiftUI
 
 @main
 struct TankodexApp: App {
-    @State private var mangaListVM = MangaListViewModel()
+    @State private var generalViewModel = generalVM()
+    @State private var searchViewModel = searchVM()
 
     var body: some Scene {
         WindowGroup {
-            HomeView()
-            .environment(mangaListVM)
+            ContentView()
+            .environment(generalViewModel)
+            .environment(searchViewModel)
         }
     }
 }

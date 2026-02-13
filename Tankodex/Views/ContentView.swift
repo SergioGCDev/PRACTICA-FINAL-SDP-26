@@ -8,18 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    let tst = true
     var body: some View {
         TabView {
             Tab("Home", systemImage: "house.fill") {
-                HomeView()  // ← Recibe environment automáticamente
+                HomeView()
             }
             
             Tab("Search", systemImage: "magnifyingglass") {
-                SearchView()  // ← También recibe environment
+                SearchView()
             }
             
             Tab("Library", systemImage: "books.vertical.fill") {
-                ProfileView()  // ← También recibe environment
+                ProfileView()
             }
         }
     }
@@ -27,5 +28,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environment(MangaListViewModel(repository: NetworkTest()))
+        .environment(generalVM(repository: NetworkTest()))
 }

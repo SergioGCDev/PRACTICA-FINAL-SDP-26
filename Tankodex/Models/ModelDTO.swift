@@ -9,38 +9,6 @@ import Foundation
 
     // MARK: - Enums / Enumeraciones
 
-enum Genre: String, Codable, CaseIterable {
-    case action = "Action"
-    case adventure = "Adventure"
-    case awardWinning = "Award Winning"
-    case drama = "Drama"
-    case fantasy = "Fantasy"
-    case horror = "Horror"
-    case supernatural = "Supernatural"
-    case mystery = "Mystery"
-    case sliceOfLife = "Slice of Life"
-    case comedy = "Comedy"
-    case sciFi = "Sci-Fi"
-    case suspense = "Suspense"
-    case sports = "Sports"
-    case ecchi = "Ecchi"
-    case romance = "Romance"
-    case girlsLove = "Girls Love"
-    case boysLove = "Boys Love"
-    case gourmet = "Gourmet"
-    case erotica = "Erotica"
-    case hentai = "Hentai"
-    case avantGarde = "Avant Garde"
-}
-
-enum Demographic: String, Codable, CaseIterable {
-    case seinen = "Seinen"
-    case shounen = "Shounen"
-    case shoujo = "Shoujo"
-    case josei = "Josei"
-    case kids = "Kids"
-}
-
 enum Theme: String, Codable, CaseIterable {
     case gore = "Gore"
     case military = "Military"

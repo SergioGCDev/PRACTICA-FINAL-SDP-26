@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @Environment(MangaListViewModel.self) private var viewModel
+    @Environment(generalVM.self) private var generalViewModel
     
     var body: some View {
         NavigationStack {
@@ -22,8 +22,8 @@ struct HomeView: View {
             .navigationTitle("Tankōdex")
         }
         .task {
-            if viewModel.mangas.isEmpty {
-                await viewModel.loadMangas()
+            if generalViewModel.mangas.isEmpty {
+                await generalViewModel.loadMangas()
             }
         }
     }
@@ -40,8 +40,10 @@ struct HomeView: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
-                    ForEach(viewModel.topFiveMangas) { manga in
-                        FeaturedMangaCard(manga: manga)
+                    ForEach(generalViewModel.topFiveMangas) { manga in
+                        FeaturedMangaCard(
+                            manga: manga
+                        )
                     }
                 }
                 .padding(.horizontal)
@@ -58,8 +60,8 @@ struct HomeView: View {
                 .accessibilityAddTraits(.isHeader)
             
             LazyVStack(alignment:.leading, spacing: 12) {
-                ForEach(viewModel.recentMangas) { manga in
-                    MangaRow(manga: manga)
+                ForEach(generalViewModel.recentMangas) { manga in
+                    MangaRow(manga: manga, displayedGenres: manga.genres)
                 }
             }
             .padding(.horizontal)
@@ -68,11 +70,11 @@ struct HomeView: View {
 }
 
 #Preview {
-    @Previewable @State var viewModel = MangaListViewModel(repository: NetworkTest())
+    @Previewable @State var generalViewModel = generalVM(repository: NetworkTest())
     
     HomeView()
-        .environment(viewModel)
+        .environment(generalViewModel)
         .task {
-            await viewModel.loadMangas()
+            await generalViewModel.loadMangas()
         }
 }

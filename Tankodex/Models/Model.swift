@@ -78,7 +78,7 @@ extension MangaListResult {
         metadata: .test
     )
 }
-    extension Manga {
+extension Manga {
         static let test = Manga(
                 id: 1,
                 title: "One Piece",
@@ -184,8 +184,7 @@ extension MangaListResult {
                 authors: [.test]
             )
     }
-
-    extension Author {
+extension Author {
         static let test = Author(
                 id: "1",
                 fullName: "Oda Eiichiro",
@@ -222,8 +221,7 @@ extension MangaListResult {
                 role: .art
             )
     }
-
-    extension PaginationMetadata {
+extension PaginationMetadata {
         static let test = PaginationMetadata(
             total: 100, // Aunque tengamos 5 datos creados.
             currentPage: 1,

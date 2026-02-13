@@ -13,27 +13,27 @@ struct FeaturedMangaCard: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .center) {
-                VStack(alignment: .leading) {
-                    Text(manga.title.uppercased())
-                        .font(.headline)
-                    Label(manga.score.description, systemImage: "star.fill")
-                        .font(.caption)
-                }
+//                VStack(alignment: .leading) {
+//                    Text(manga.title.uppercased())
+//                        .font(.headline)
+//                    Label(manga.score.description, systemImage: "star.fill")
+//                        .font(.caption)
+//                }
                 
                 AsyncImage(url: manga.mainPicture) { mangaImage in
                    mangaImage
                         .resizable()
-                        .scaledToFill()
-                        .frame(width: 200)
+                        .scaledToFit()
+                        .frame(height: 150)
                 } placeholder: {
                     ProgressView()
                 }
             }
             
         }
-        .frame(width: 300, height: 200)
-        .padding()
-        .background(.black.opacity(0.1), in: .rect(cornerRadius: 8))
+        
+//        .padding()
+//        .background(.black.opacity(0.1), in: .rect(cornerRadius: 8))
         
     }
 }
