@@ -1,50 +1,97 @@
-//
-//  SearchView.swift
-//  Tankodex
-//
-//  Created by Sergio García on 11/2/26.
-//
+    //
+    //  SearchView.swift
+    //  Tankodex
+    //
+    //  Created by Sergio García on 11/2/26.
+    //
 
 import SwiftUI
+import SwiftData
 
 struct SearchView: View {
     @Environment(searchVM.self) private var searchViewModel
+    @Environment(libraryVM.self) private var libraryViewModel
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+
+    
+    @State private var showProfile = false
+    @State private var showSettings = false
+    
+    private var demographicBinding: Binding<Demographic> {
+        Binding(
+            get: { searchViewModel.filteredDemographic },
+            set: { searchViewModel.filterByDemographic($0) }
+        )
+    }
     
     var body: some View {
+        @Bindable var vm = searchViewModel
         NavigationStack {
             VStack {
-                // Filtros de género
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(Genre.allCases, id: \.self) { genre in
-                            GenreFilterButton(
-                                genre: genre,
-                                isSelected: searchViewModel.filteredGenre == genre
-                            ) {
-                                searchViewModel.filterByGenre(genre)
-                            }
-                        }
+                    // Filtro de demographic
+                Picker("Demographic", selection: demographicBinding) {
+                    ForEach(Demographic.allCases, id: \.self) { demographic in
+                        Image(systemName: demographic.icon).tag(demographic)
+                            .symbolRenderingMode(.hierarchical)
                     }
-                    .padding(.horizontal)
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
+                .onChange(of: searchViewModel.filteredDemographic) { _, newValue in
+                    searchViewModel.filterByDemographic(newValue)
                 }
                 
-                // Lista de mangas
-                ScrollView {
-                    LazyVStack(spacing: 12) {
-                        ForEach(searchViewModel.mangas) { manga in
-                            MangaRow(
-                                manga: manga,
-                                displayedGenres: searchViewModel.displayGenres(for: manga)
-                            )
+                    // Lista de mangas
+                Group {
+                    if horizontalSizeClass == .regular {
+                        ScrollView {
+                            LazyVGrid(columns: columns) {
+                                ForEach(vm.filteredMangas) { manga in
+                                    MangaRow(manga: manga, displayedGenres: manga.genres)
+                                        .task {
+                                            await vm.loadNextPageIfNeeded(manga: manga)
+                                        }
+                                }
+                            }
+                            .padding(.horizontal)
                         }
+                    } else {
+                        List(vm.filteredMangas) { manga in
+                            MangaRow(manga: manga, displayedGenres: manga.genres)
+                                .task {
+                                    await vm.loadNextPageIfNeeded(manga: manga)
+                                }
+                        }
+                        .listStyle(.inset)
                     }
-                    .padding(.horizontal)
+                }
+                .searchable(text: $vm.searchText)
+                .onChange(of: searchViewModel.searchText) { _, newValue in
+                    if newValue.count >= 3 || newValue.isEmpty {
+                        searchViewModel.onSearchTextChanged()
+                    }
                 }
             }
-            .navigationTitle("Buscar")
+            .navigationTitle("Search")
+            .toolbar {
+                ToolbarGeneral(showProfile: $showProfile, showSettings: $showSettings)
+            }
+            
+            .sheet(isPresented: $showProfile){
+                ProfileSheetView()
+                    .environment(libraryViewModel)
+                    .presentationSizing(.form)
+            }
+            
+            .sheet(isPresented: $showSettings){
+                SettingsSheetView()
+                    .presentationSizing(.form)
+            }
+            
             .task {
                 if searchViewModel.mangas.isEmpty {
-                    await searchViewModel.loadMangas()  // ← Método correcto
+                    await searchViewModel.loadMangas()
                 }
             }
         }
@@ -54,8 +101,15 @@ struct SearchView: View {
 #Preview {
     @Previewable @State var searchViewModel = searchVM(repository: NetworkTest())
     
-    SearchView()
+    let container = try! ModelContainer(
+        for: MangaCollection.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    let vm = libraryVM(modelContainer: container)
+    
+    return SearchView()
         .environment(searchViewModel)
+        .environment(vm)
         .task {
             await searchViewModel.loadMangas()
         }

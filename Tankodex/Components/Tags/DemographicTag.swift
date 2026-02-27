@@ -7,12 +7,18 @@
 
 import SwiftUI
 
+/// Etiqueta visual que muestra el demográfico de un manga como una pastilla de texto o solo emoji.
 struct DemographicTag: View {
+    /// Demográfico que representa la etiqueta.
     let demographic: Demographic
+    /// Estilo de presentación de la etiqueta.
     let style: Style
-    
+
+    /// Variantes de presentación disponibles para `DemographicTag`.
     enum Style {
+        /// Muestra el emoji junto al nombre del demográfico.
         case withText
+        /// Muestra únicamente el emoji dentro de un círculo.
         case emoji
     }
     var body: some View {

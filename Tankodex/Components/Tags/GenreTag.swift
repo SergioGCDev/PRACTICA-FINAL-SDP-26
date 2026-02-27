@@ -15,7 +15,9 @@
 
 import SwiftUI
 
+/// Etiqueta de solo lectura que muestra el nombre de un género como pastilla coloreada.
 struct GenreTag: View {
+    /// Género que representa la etiqueta.
     let genre: Genre
     
     var body: some View {

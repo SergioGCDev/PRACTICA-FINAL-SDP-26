@@ -13,36 +13,53 @@ enum Demographic: String, Codable, CaseIterable, Hashable {
     case seinen = "Seinen"
     case josei = "Josei"
     case kids = "Kids"
+    case all = "All"
     
         // MARK: - UI Properties
     
     var color: Color {
         switch self {
         case .shounen:
-            return .blue        // Masculino joven
+            return .blue
         case .shoujo:
-            return .pink        // Femenino joven
+            return .pink
         case .seinen:
-            return .indigo      // Masculino adulto
+            return .indigo
         case .josei:
-            return .purple      // Femenino adulto
+            return .purple
         case .kids:
-            return .green       // Infantil
+            return .green
+        case .all:
+            return .gray
+
         }
     }
     
     var emoji: String {
         switch self {
         case .shounen:
-            return "👦🏻"  // Chico joven
+            return "👦🏻"
         case .shoujo:
-            return "👧🏻"  // Chica joven
+            return "👧🏻"
         case .seinen:
-            return "🧔🏻‍♂️"  // Hombre adulto
+            return "🧔🏻‍♂️"
         case .josei:
-            return "👩🏻‍🦱"  // Mujer adulta
+            return "👩🏻‍🦱"
         case .kids:
-            return "👶🏻"  // Bebé/niño pequeño
+            return "👶🏻"
+        case .all:
+            return "👤"
         }
     }
+    
+    var icon: String {
+            switch self {
+            case .all:     return "square.grid.2x2"
+            case .shounen: return "bolt"
+            case .shoujo:  return "heart"
+            case .seinen:  return "brain"
+            case .josei:   return "sparkles"
+            case .kids:    return "star"
+            }
+        }
 }

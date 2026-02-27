@@ -7,9 +7,13 @@
 
 import SwiftUI
 
+/// Botón de filtro con forma de pastilla que representa la selección de un género concreto.
 struct GenreFilterButton: View {
+    /// Género que identifica este botón.
     let genre: Genre
+    /// Indica si el género está actualmente seleccionado.
     let isSelected: Bool
+    /// Acción ejecutada al pulsar el botón.
     let action: () -> Void
     
     var body: some View {

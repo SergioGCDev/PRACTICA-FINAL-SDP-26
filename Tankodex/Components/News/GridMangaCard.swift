@@ -7,7 +7,9 @@
 
 import SwiftUI
 
+/// Celda de cuadrícula que muestra el título y el título japonés de un manga en disposición horizontal.
 struct GridMangaCard: View {
+    /// Manga cuyos títulos se muestran en la celda.
     let manga: Manga
     
     var body: some View {
