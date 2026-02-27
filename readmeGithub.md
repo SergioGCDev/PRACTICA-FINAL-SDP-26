@@ -213,6 +213,7 @@ Responses use **snake_case** JSON keys (decoded with `keyDecodingStrategy: .conv
 - [ ] Autenticación con JWT y colección en cloud
 - [ ] Widget con progreso de lectura (WidgetKit)
 - [ ] StoreKit 2 para modelo freemium
+- [ ] Full accessibility support (VoiceOver, Dynamic Type, contrast)
 
 ---
 
