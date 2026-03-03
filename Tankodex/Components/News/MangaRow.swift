@@ -31,22 +31,23 @@ struct MangaRow: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text(manga.title)
-                        .font(.headline)
-                        .lineLimit(2)
+                    HStack {
+                        Text(manga.title)
+                            .font(.headline)
+                            .lineLimit(2)
+                        Spacer()
+                        PublicationStatusTag(status: manga.status)
+                    }
                     if !manga.formattedJapaneseTitle.isEmpty {
                         Text(manga.formattedJapaneseTitle)
                             .font(.subheadline)
                             .lineLimit(1)
                     }
+                    Text(manga.formattedStartDate)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     
-                    if let volumes = manga.volumes, volumes > 0 {
-                        Text("Volumes: \(volumes)")
-                    }
-                    if let chapters = manga.chapters, chapters > 0 {
-                        Text("Chapters: \(chapters)")
-                    }
-                    
+                    Spacer()
                     if let demographic = manga.demographics.first {
                         DemographicTag(demographic: demographic, style: .withText)
                     }
@@ -84,7 +85,7 @@ struct MangaRow: View {
         .sheet(isPresented: $showDetail) {
             MangaDetailView(manga: manga)
                 .environment(libraryViewModel)
-                .presentationSizing(.form)
+                .presentationSizing(.page)
         }
     }
     

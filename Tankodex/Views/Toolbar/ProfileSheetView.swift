@@ -1,19 +1,20 @@
-//
-//  ProfileSheetView.swift
-//  Tankodex
-//
-//  Created by Sergio García on 26/2/26.
-//
+    //
+    //  ProfileSheetView.swift
+    //  Tankodex
+    //
+    //  Created by Sergio García on 26/2/26.
+    //
 
 import SwiftUI
 import PhotosUI
 
+@MainActor
 struct ProfileSheetView: View {
     @Environment(libraryVM.self) private var libraryViewModel
     @Environment(\.dismiss) private var dismiss
     
     @State private var profileVM = ProfileVM()
-    @State private var selectedPhoto: PhotosPickerItem?
+    @State private var showEmojiPicker = false
     @FocusState private var isNameFocused: Bool
     
     
@@ -21,25 +22,16 @@ struct ProfileSheetView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
-                    
-                    // MARK: - Avatar
+                        // MARK: - Avatar
                     VStack(spacing: 12) {
-                        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                        Button {
+                            showEmojiPicker = true
+                        } label: {
                             ZStack(alignment: .bottomTrailing) {
-                                Group {
-                                    if let image = profileVM.profileImage {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .scaledToFill()
-                                    } else {
-                                        Image(systemName: "person.fill")
-                                            .font(.system(size: 50))
-                                            .foregroundStyle(.secondary)
-                                    }
-                                }
-                                .frame(width: 100, height: 100)
-                                .clipShape(.circle)
-                                .background(.regularMaterial, in: .circle)
+                                Text(profileVM.avatar)
+                                    .font(.system(size: 64))
+                                    .frame(width: 100, height: 100)
+                                    .background(.regularMaterial, in: .circle)
                                 
                                 Image(systemName: "pencil.circle.fill")
                                     .font(.title2)
@@ -56,7 +48,7 @@ struct ProfileSheetView: View {
                     }
                     .padding(.top)
                     
-                    // MARK: - Stats
+                        // MARK: - Stats
                     VStack(alignment: .leading, spacing: 16) {
                         Text("My Collection")
                             .font(.headline)
@@ -82,8 +74,9 @@ struct ProfileSheetView: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .task(id: selectedPhoto) {
-                await profileVM.savePhoto(from: selectedPhoto)
+            .sheet(isPresented: $showEmojiPicker) {
+                EmojiPicker(selectedEmoji: $profileVM.avatar)
+                    .presentationSizing(.form)
             }
         }
     }

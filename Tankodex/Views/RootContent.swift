@@ -1,3 +1,12 @@
+//
+//  RootContent.swift
+//  Tankodex
+//
+//  Created by Sergio García on 2/3/26.
+//
+
+import SwiftUI
+
 struct RootContent: View {
     let showLoadingOverlay: Bool
 

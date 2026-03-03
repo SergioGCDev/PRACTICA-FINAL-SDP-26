@@ -41,6 +41,23 @@ extension URL {
             ])
     }
     
+    static func getMangasByTheme(_ theme: Theme, page: Int = 1, per: Int = 20) -> URL {
+        api.appending(path: "/list/mangaByTheme/\(theme.rawValue)")
+            .appending(queryItems: [
+                URLQueryItem(name: "page", value: "\(page)"),
+                URLQueryItem(name: "per", value: "\(per)")
+            ])
+    }
+    
+    static func getMangasByGenre(_ genre: Genre, page: Int = 1, per: Int = 20) -> URL {
+        api.appending(path: "/list/mangaByTheme/\(genre.rawValue)")
+            .appending(queryItems: [
+                URLQueryItem(name: "page", value: "\(page)"),
+                URLQueryItem(name: "per", value: "\(per)")
+            ])
+    }
+    
+    
     /// Genera la URL para obtener el detalle de un manga específico mediante su identificador.
     /// - Parameter id: El ID único del manga en la base de datos.
     /// - Returns: Una `URL` para consultar un único manga.
@@ -61,4 +78,6 @@ extension URL {
                 URLQueryItem(name: "per", value: "\(per)")
             ])
     }
+    
+    
 }

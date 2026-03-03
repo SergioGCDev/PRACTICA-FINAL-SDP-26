@@ -13,16 +13,26 @@ struct TankodexApp: App {
     @State private var generalViewModel = generalVM()
     @State private var searchViewModel = searchVM()
     @State private var libraryViewModel: libraryVM?
-    
+    @State private var showLoading = true
+
     @AppStorage("colorScheme") private var colorScheme: String = "system"
-    
+
     var body: some Scene {
         WindowGroup {
             if let libraryViewModel {
-                ContentView()
-                    .environment(generalVM())
-                    .environment(searchVM())
+                RootContent(showLoadingOverlay: showLoading)
+                    .environment(generalViewModel)
+                    .environment(searchViewModel)
                     .environment(libraryViewModel)
+                    .preferredColorScheme(resolvedColorScheme)
+                    .task {
+                        async let dataLoad: () = generalViewModel.loadMangas()
+                        async let minimumTime: () = Task.sleep(for: .seconds(2.5))
+                        _ = try? await (dataLoad, minimumTime)
+                        withAnimation(.easeOut(duration: 0.4)) {
+                            showLoading = false
+                        }
+                    }
             }
         }
         .modelContainer(for: MangaCollection.self) { result in
@@ -30,7 +40,7 @@ struct TankodexApp: App {
             libraryViewModel = libraryVM(modelContainer: container)
         }
     }
-    
+
     private var resolvedColorScheme: ColorScheme? {
         switch colorScheme {
         case "light": return .light

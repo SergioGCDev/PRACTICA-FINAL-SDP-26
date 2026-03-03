@@ -100,13 +100,22 @@ extension Manga {
         titleEnglish.map { "(\($0))" } ?? ""
     }
     
+    var formattedScore: String {
+        score.formatted(.number.precision(.fractionLength(2)))
+    }
+    
+    var formattedStartDate: String {
+        guard let startDate else { return "Unknown" }
+        return startDate.formatted(date: .abbreviated, time: .omitted)
+    }
+    
     var totalVolumesLabel: String {
         if let total = volumes {
             return "\(total)"
         }
         switch status {
         case .finished, .discontinued:
-            return "Unknown"
+            return "Finished"
         case .publishing, .onHiatus:
             return "Ongoing"
         case .none:

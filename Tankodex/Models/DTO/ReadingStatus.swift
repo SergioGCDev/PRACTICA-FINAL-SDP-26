@@ -15,10 +15,10 @@ enum ReadingStatus: String, Codable, CaseIterable {
     
     var icon: String {
         switch self {
-        case .wishlist:   return "heart"
+        case .wishlist:   return "heart.circle"
         case .reading:    return "book"
-        case .collected:  return "shippingbox"
-        case .completed:  return "checkmark.circle"
+        case .collected:  return "books.vertical.fill"
+        case .completed:  return "checkmark.seal.fill"
         }
     }
 }

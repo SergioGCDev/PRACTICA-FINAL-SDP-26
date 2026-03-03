@@ -1,9 +1,9 @@
-    //
-    //  DemographicTag.swift
-    //  Tankodex
-    //
-    //  Created by Sergio García on 10/2/26.
-    //
+//
+//  DemographicTag.swift
+//  Tankodex
+//
+//  Created by Sergio García on 10/2/26.
+//
 
 import SwiftUI
 

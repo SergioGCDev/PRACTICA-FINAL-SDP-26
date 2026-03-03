@@ -14,20 +14,18 @@ struct LoadingView: View {
     // TODO: LocalizedStringKey para implementar localizations
     let message: LocalizedStringKey
 
-    init(message: LocalizedStringKey = "Loading collection...") {
+    init(message: LocalizedStringKey = "Swifgey is sorting your collection...") {
         self.message = message
     }
 
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: [
-                    Color.accentColor.opacity(0.8),
-                    Color.accentColor.opacity(0.3)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            RadialGradient(
+                gradient: Gradient(colors: [.tankodexSecondary.opacity(0.6), .tankodexInterface]),
+                        center: .center,
+                        startRadius: 2,
+                        endRadius: 500
+                    )
             .ignoresSafeArea()
 
             VStack(spacing: 30) {
@@ -42,6 +40,7 @@ struct LoadingView: View {
                     .tint(.white)
                     .scaleEffect(1.5)
                     .padding(.top, 20)
+                    
 
                 Spacer()
 
@@ -69,5 +68,5 @@ struct LoadingView: View {
 }
 
 #Preview("Custom message") {
-    LoadingView(message: "Loading your library...")
+    LoadingView(message: "Tidying up the library for you...")
 }

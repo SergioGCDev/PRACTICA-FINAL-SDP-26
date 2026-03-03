@@ -7,8 +7,9 @@
 
 import Foundation
 
-/// ViewModel principal para la pantalla de noticias (`NewsView`).
+/// ViewModel principal para la pantalla de noticias (`HomeView`).
 /// Gestiona la carga y paginación de mangas destacados y recientes.
+
 @MainActor
 @Observable
 final class generalVM {
@@ -23,8 +24,7 @@ final class generalVM {
     private(set) var topFiveMangas: [Manga] = []
     /// Top 10 mangas ordenados por puntuación.
     private(set) var topTenMangas: [Manga] = []
-    /// Últimos 10 mangas ordenados por fecha de inicio.
-    private(set) var recentMangas: [Manga] = []
+    
     
     // MARK: - Pagination
     
@@ -43,13 +43,17 @@ final class generalVM {
     
     // MARK: - Computed Properties
     
-    /// Lista completa de mangas cargados por el paginador.
     var mangas: [Manga] { pagination.mangas }
     
     /// Metadatos de paginación de la última respuesta.
     var metadata: PaginationMetadata? { pagination.metadata }
     
     // MARK: - Public Methods
+    
+    func allMangas(excluding top: [Manga]) -> [Manga] {
+        let topIds = Set(top.map(\.id))
+        return pagination.mangas.filter { !topIds.contains($0.id) }
+    }
     
     /// Carga la primera página de mangas y calcula los rankings y recientes.
     func loadMangas() async {
@@ -61,11 +65,6 @@ final class generalVM {
             let sortedByScore = pagination.mangas.sorted { $0.score > $1.score }
             topFiveMangas = Array(sortedByScore.prefix(5))
             topTenMangas = Array(sortedByScore.prefix(10))
-            recentMangas = pagination.mangas
-                .filter { $0.startDate != nil }
-                .sorted { $0.startDate! > $1.startDate! }
-                .prefix(10)
-                .map { $0 }
         } catch {
             errorMessage = error.localizedDescription
         }

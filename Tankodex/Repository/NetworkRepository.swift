@@ -28,6 +28,8 @@ protocol NetworkRepository: Sendable, NetworkInteractor {
     /// - Returns: Resultado con la lista de mangas correspondientes a la demografía.
     /// - Throws: `NetworkError` en caso de fallo en la red o datos corruptos.
     func getMangasByDemographic(demographic: Demographic, page: Int, perPage: Int) async throws(NetworkError) -> MangaListResult
+    func getMangasByTheme(theme: Theme, page: Int, perPage: Int) async throws(NetworkError) -> MangaListResult
+    func getMangasByGenre(genre: Genre, page: Int, perPage: Int) async throws(NetworkError) -> MangaListResult
     
     /// Obtiene la información detallada de un manga a través de su identificador.
     /// - Parameter id: ID único del manga.
@@ -72,6 +74,16 @@ struct Network: NetworkRepository {
         return try await getJSON(.get(url: url), type: MangaListResponse.self).toMangaListResult
     }
     
+    func getMangasByTheme(theme: Theme, page: Int = 1, perPage: Int = 20) async throws(NetworkError) -> MangaListResult {
+        let url = URL.getMangasByTheme(theme, page: page, per: perPage)
+        return try await getJSON(.get(url: url), type: MangaListResponse.self).toMangaListResult
+    }
+    
+    func getMangasByGenre(genre: Genre, page: Int = 1, perPage: Int = 20) async throws(NetworkError) -> MangaListResult {
+        let url = URL.getMangasByGenre(genre, page: page, per: perPage)
+        return try await getJSON(.get(url: url), type: MangaListResponse.self).toMangaListResult
+    }
+    
     func getMangaById(id: Int) async throws(NetworkError) -> Manga {
         try await getJSON(.get(url: .getMangaById(id)), type: MangaDTO.self).toManga
     }
@@ -89,6 +101,14 @@ struct NetworkTest: NetworkRepository {
     }
     
     func getMangasByDemographic(demographic: Demographic, page: Int = 1, perPage: Int = 20) async throws(NetworkError) -> MangaListResult {
+        .test
+    }
+    
+    func getMangasByTheme(theme: Theme, page: Int = 1, perPage: Int = 20) async throws(NetworkError) -> MangaListResult {
+        .test
+    }
+    
+    func getMangasByGenre(genre: Genre, page: Int = 1, perPage: Int = 20) async throws(NetworkError) -> MangaListResult {
         .test
     }
     

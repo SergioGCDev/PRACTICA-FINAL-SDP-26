@@ -33,7 +33,6 @@ struct SettingsSheetView: View {
                 Section("Language") {
                     HStack {
                         Label("Language", systemImage: "globe")
-                        Spacer()
                         Text("Coming soon")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -41,8 +40,19 @@ struct SettingsSheetView: View {
                             .padding(.vertical, 4)
                             .background(.secondary.opacity(0.15))
                             .clipShape(.capsule)
+                        Spacer()
+                        Picker("", selection: .constant("system")) {
+                            Text("System").tag("system")
+                            Text("Spanish").tag("es")
+                            Text("English").tag("en")
+                            Text("Japanese").tag("ja")
+                        }
+                        .disabled(true)
+                        .foregroundStyle(.secondary)
                     }
                     .foregroundStyle(.secondary)
+
+                    
                 }
             }
             .navigationTitle("Settings")

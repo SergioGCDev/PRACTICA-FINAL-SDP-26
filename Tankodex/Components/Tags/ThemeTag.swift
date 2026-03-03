@@ -1,3 +1,11 @@
+//
+//  ThemeTag.swift
+//  Tankodex
+//
+//  Created by Sergio García on 2/3/26.
+//
+
+
 import SwiftUI
 
 /// Etiqueta de solo lectura que muestra el nombre de una temática como pastilla coloreada.
@@ -27,12 +35,10 @@ struct ThemeTag: View {
 
 #Preview {
     VStack(spacing: 12) {
-        // Probando con algunos casos comunes si tu Enum Theme los tiene
         ThemeTag(theme: .psychological)
         ThemeTag(theme: .samurai)
-        ThemeTag(theme: .cyberpunk)
         
-        Text("Vista en flujo:")
+        Text("Testing:")
             .font(.caption)
             .foregroundStyle(.secondary)
             .padding(.top)

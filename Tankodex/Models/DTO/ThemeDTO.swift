@@ -1,3 +1,12 @@
+//
+//  ThemeDTO.swift
+//  Tankodex
+//
+//  Created by Sergio García on 2/3/26.
+//
+
+import Foundation
+
 /// DTO de temas tal y como lo devuelve la API
 struct ThemeDTO: Codable, Identifiable {
     let id: UUID

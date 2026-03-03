@@ -1,9 +1,9 @@
-//
-//  Genre.swift
-//  Tankodex
-//
-//  Created by Sergio García on 12/2/26.
-//
+    //
+    //  Genre.swift
+    //  Tankodex
+    //
+    //  Created by Sergio García on 12/2/26.
+    //
 
 import SwiftUI
 
@@ -30,7 +30,9 @@ enum Genre: String, Codable, CaseIterable, Hashable {
     case hentai = "Hentai"
     case avantGarde = "Avant Garde"
     
-    // MARK: - UI Properties
+    var name: String { rawValue }
+    
+        // MARK: - UI Properties
     var color: Color {
         switch self {
         case .action:
@@ -76,5 +78,17 @@ enum Genre: String, Codable, CaseIterable, Hashable {
         case .avantGarde:
             return Color(red: 0.5, green: 0.5, blue: 0.5)  // Gris
         }
+    }
+    
+        // Un pequeño truco para no repetir el diseño en todos lados
+    @ViewBuilder
+    func tagView() -> some View {
+        Text(name)
+            .font(.caption)
+            .fontWeight(.medium)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(self.color.opacity(0.1), in: .capsule)
+            .foregroundStyle(self.color)
     }
 }

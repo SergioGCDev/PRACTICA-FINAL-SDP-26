@@ -12,14 +12,10 @@ struct LoadingAnimatedIcon: View {
 
     var body: some View {
         ZStack {
-            Circle()
-                .fill(.white.opacity(0.2))
-                .frame(width: 120, height: 120)
-            // Sustituye por tu icono cuando lo tengas
-            Image(systemName: "book.stack.fill")
+            Image("swifgeyLS")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 60, height: 60)
+                .frame(width: 120, height: 120)
                 .foregroundStyle(.white)
                 .scaleEffect(isAnimating ? 1.05 : 0.95)
                 .animation(
@@ -28,4 +24,8 @@ struct LoadingAnimatedIcon: View {
                 )
         }
     }
+}
+
+#Preview {
+    LoadingAnimatedIcon(isAnimating: true)
 }

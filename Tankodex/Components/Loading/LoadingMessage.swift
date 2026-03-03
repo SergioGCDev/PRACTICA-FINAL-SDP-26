@@ -15,10 +15,11 @@ struct LoadingMessage: View {
         VStack(spacing: 8) {
             Text(message)
                 .font(.headline)
+                .fontDesign(.rounded)
                 .foregroundStyle(.white)
 
             if showSubtitle {
-                Text("This may take a moment")
+                Text("Almost there!")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.7))
                     .transition(.opacity.combined(with: .move(edge: .bottom)))
