@@ -129,15 +129,24 @@ struct GenreDTO: Codable, Identifiable {
     var asEnum: Genre? { Genre(rawValue: genre) }
 }
 
-/// DTO de temática tal como lo devuelve la API.
+
+/// DTO de temas tal y como lo devuelve la API
 struct ThemeDTO: Codable, Identifiable {
-    /// Identificador único de la temática.
-    let id: String
-    /// Nombre de la temática en texto plano.
+    let id: UUID
     let theme: String
-    
-    /// Convierte la temática a su representación como enum ``Theme``.
-    var asEnum: Theme? { Theme(rawValue: theme) }
+}
+
+extension ThemeDTO {
+    var themeType: Theme? {
+        Theme(rawValue: theme)
+    }
+}
+
+extension ThemeDTO {
+    static let preview = ThemeDTO(
+        id: UUID(uuidString: "ADC7CBC8-36B9-4E52-924A-4272B7B2CB2C")!,
+        theme: "Martial Arts"
+    )
 }
 
 /// DTO de demografía tal como lo devuelve la API.
